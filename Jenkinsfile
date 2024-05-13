@@ -13,7 +13,7 @@ pipeline {
             steps {
                 git branch: 'main', credentialsId: GIT_CREDENTIALS, url: 'https://github.com/mirshaadrayiz/TodoList.git'
             }
-        }
+    }
         
         stage('Build Docker Image') {
             steps {
