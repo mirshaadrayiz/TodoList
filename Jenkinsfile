@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_HUB_CREDENTIALS = 'docker-hub-credentials'
         GIT_CREDENTIALS = 'git-hub-credentials'
-        IMAGE_NAME = 'your-dockerhub-username/todo-list'
+        IMAGE_NAME = 'mirshaad98/todo-list'
         DOCKER_COMPOSE_FILE = 'docker-compose.yml'
     }
     
