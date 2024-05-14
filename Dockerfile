@@ -1,4 +1,5 @@
 FROM jupyter/base-notebook
+WORKDIR /home/jovyan/work
 RUN pip install mysql-connector-python
 COPY . /home/jovyan/work/
 EXPOSE 8888
