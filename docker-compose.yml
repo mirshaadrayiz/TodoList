@@ -1,36 +1,31 @@
 version: '3.8'
 
 services:
-  todopy:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8888:8888"
-    depends_on:
-      - todo-db
-    environment:
-      DB_HOST: todo-db
-      DB_USER: root
-      DB_PASSWORD: 123
-      DB_NAME: todo_list
-      DB_PORT: 3306
-    networks:
-      - todo-net
-
   todo-db:
     image: mysql:5.7
-    environment:
-      MYSQL_ROOT_PASSWORD: 123
-    volumes:
-      - mysql-data:/var/lib/mysql
-      - ./todo_list.sql:/docker-entrypoint-initdb.d/init.sql # Update the path to your SQL script
+    container_name: todo-db
     networks:
       - todo-net
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: todo_db
+      MYSQL_USER: todo_user
+      MYSQL_PASSWORD: todo_password
+    volumes:
+      - ./todo_list.sql:/docker-entrypoint-initdb.d/init.sql
 
-volumes:
-  mysql-data:
+  todopy:
+    build: .
+    container_name: todopy
+    networks:
+      - todo-net
+    ports:
+      - "8888:8888"
+    environment:
+      DB_HOST: todo-db
+      DB_NAME: todo_db
+      DB_USER: todo_user
+      DB_PASSWORD: todo_password
 
 networks:
   todo-net:
-    driver: bridge
