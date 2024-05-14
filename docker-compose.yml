@@ -24,7 +24,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: '123'    # Root password for MySQL
     volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./todo_list.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - todo-net
 
