@@ -13,12 +13,24 @@ pipeline {
             steps {
                 git branch: 'main', credentialsId: GIT_CREDENTIALS, url: 'https://github.com/mirshaadrayiz/TodoList.git'
             }
-    }
+        }
         
+        stage('Clean Up') {
+            steps {
+                script {
+                    // Stop and remove any existing containers
+                    sh 'docker-compose down || true'
+                    // Remove old images to avoid using the cache
+                    sh "docker rmi \$(docker images -q ${IMAGE_NAME}) || true"
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build IMAGE_NAME
+                    // Build the Docker image and use a cache-busting technique
+                    docker.build("${IMAGE_NAME}", "--no-cache .")
                 }
             }
         }
@@ -36,7 +48,8 @@ pipeline {
         stage('Deploy with Docker Compose') {
             steps {
                 script {
-                    sh "docker-compose -f ${DOCKER_COMPOSE_FILE} up -d"
+                    // Deploy the application using Docker Compose
+                    sh "docker-compose -f ${DOCKER_COMPOSE_FILE} up -d --build --force-recreate"
                 }
             }
         }
